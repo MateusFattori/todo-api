@@ -1,7 +1,7 @@
 package com.todo.todo_api.domain;
 
 public enum Status {
-    PEDDING,
+    PENDING,
     IN_PROGRESS,
     DONE
 }

@@ -1,6 +1,7 @@
 package com.todo.todo_api.domain;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
@@ -13,7 +14,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,20 +28,24 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Task {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     
+    @NotBlank
+    @Size(min = 3, max = 255)
     @Column(nullable = false, length = 255)
     private String title;
 
+    @Size(max = 1000)
     @Column(length = 1000)
     private String description;
 
     @Enumerated(EnumType.STRING)
-    private Status status = Status.PEDDING;
+    private Status status = Status.PENDING;
 
     @Enumerated(EnumType.STRING)
     private Priority priority  = Priority.MEDIUM;
@@ -49,12 +57,11 @@ public class Task {
 
     @PrePersist
     public void prePersist() {
-        this.createdAt = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now(ZoneOffset.UTC);
     }
 
     @PreUpdate
     public void preUpdate() {
-        this.updatedAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now(ZoneOffset.UTC);
     }
-    
 }

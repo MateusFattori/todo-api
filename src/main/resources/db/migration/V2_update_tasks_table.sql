@@ -1,0 +1,7 @@
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+ALTER TABLE tasks
+ALTER COLUMN id SET DEFAULT gen_random_uuid();
+ALTER TABLE tasks
+ALTER COLUMN created_at SET DEFAULT now();
+ALTER TABLE tasks
+ALTER COLUMN updated_at SET DEFAULT now();
