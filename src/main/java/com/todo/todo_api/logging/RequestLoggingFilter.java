@@ -39,7 +39,7 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
 
             var logMap = Map.of(
                 "timestamp", Instant.now().toString(),
-                "level", "info",
+                "level", "INFO",
                 "request_id", requestId,
                 "method", request.getMethod(),
                 "path", request.getRequestURI(),
@@ -47,7 +47,7 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
                 "duration_ms", duration
             );
 
-            log.info(mapper.writeValueAsString(logMap));
+            log.info("Request completed: {}", mapper.writeValueAsString(logMap));
         }
     }
 }

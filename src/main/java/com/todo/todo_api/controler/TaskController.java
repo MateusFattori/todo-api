@@ -22,6 +22,7 @@ import com.todo.todo_api.domain.Priority;
 import com.todo.todo_api.domain.Status;
 import com.todo.todo_api.dto.request.CreateTaskRequest;
 import com.todo.todo_api.dto.request.UpdateTaskRequest;
+import com.todo.todo_api.dto.response.ApiResponse;
 import com.todo.todo_api.dto.response.TaskResponse;
 import com.todo.todo_api.services.TaskService;
 
@@ -37,29 +38,37 @@ public class TaskController {
     private final TaskService taskService;
 
     @PostMapping
-    public ResponseEntity<TaskResponse> createeTask(@Valid @RequestBody CreateTaskRequest request) {
-        TaskResponse response = taskService.createTask(request);
+    public ResponseEntity<ApiResponse<TaskResponse>> createeTask(@Valid @RequestBody CreateTaskRequest request) {
+        TaskResponse task = taskService.createTask(request);
+        ApiResponse<TaskResponse> response = new ApiResponse<>(task, "Task created successfully");
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TaskResponse> getAllById(@PathVariable UUID id) {
+    public ResponseEntity<ApiResponse<TaskResponse>> getAllById(@PathVariable UUID id) {
         TaskResponse task = taskService.getTaskById(id);
-        return ResponseEntity.ok(task);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<TaskResponse> updateTask(@PathVariable UUID id, 
-        @Valid @RequestBody UpdateTaskRequest request) {
-        TaskResponse response = taskService.updateTask(id, request);
+        ApiResponse<TaskResponse> response = new ApiResponse<>(task, "Task retrieved successfully");
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/{id}") 
-    public ResponseEntity<Void> deleteTask(@PathVariable UUID id) {
-        taskService.deleteTask(id);
-        return ResponseEntity.noContent().build();
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<TaskResponse>> updateTask(@PathVariable UUID id, 
+        @Valid @RequestBody UpdateTaskRequest request) {
+        TaskResponse task = taskService.updateTask(id, request);
+        ApiResponse<TaskResponse> response = new ApiResponse<>(task, "Task updated successfully");
+        return ResponseEntity.ok(response);
     }
+
+        @DeleteMapping("/{id}")
+        public ResponseEntity<ApiResponse<Void>> deleteTask(@PathVariable UUID id) {
+
+            taskService.deleteTask(id);
+
+            ApiResponse<Void> response =
+                    new ApiResponse<>(null, "Task deleted successfully");
+
+            return ResponseEntity.ok(response);
+        }
 
     @GetMapping
     public ResponseEntity<Map<String, Object>> getAllTasks(
@@ -86,8 +95,9 @@ public class TaskController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<TaskResponse>> searchTasks(@RequestParam("q") String query) {
+    public ResponseEntity<ApiResponse<List<TaskResponse>>> searchTasks(@RequestParam("q") String query) {
         List<TaskResponse> tasks = taskService.searchTasks(query);
-        return ResponseEntity.ok(tasks);
+        ApiResponse<List<TaskResponse>> apiResponse = new ApiResponse<>(tasks, "Tasks retrieved successfully");
+        return ResponseEntity.ok(apiResponse);
     }
 }

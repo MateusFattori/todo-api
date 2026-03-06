@@ -38,7 +38,7 @@ public class HealthController {
             "uptime_seconds", Duration.between(startTime, Instant.now()).getSeconds(),
             "checks", Map.of("database", Map.of(
                 "status", dbStatus,
-                "reponse_time_ms", dbReponseTime
+                "response_time_ms", dbReponseTime
             ))
         );
 

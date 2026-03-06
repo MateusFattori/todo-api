@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import jakarta.servlet.http.HttpServletRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,29 +23,49 @@ public class GlobalExceptionHandler {
     
     public record ErrorResponse(String code, String message, List<FieldErrorDetail> details) {}
     public record FieldErrorDetail(String field, String message) {}
+    public record ErrorWrapper(ErrorResponse error) {}
 
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleNotFound(NotFoundException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorWrapper> handleNotFound(NotFoundException ex, HttpServletRequest request) {
         String requestId = getRequestId(request);
         logError(ex, request, requestId, HttpStatus.NOT_FOUND);
         ErrorResponse error = new ErrorResponse("NOT_FOUND", ex.getMessage(), null);
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorWrapper(error));
     }
 
     @ExceptionHandler(InvalidStatusTransitionException.class)
-    public ResponseEntity<ErrorResponse> handleInvalidStatus(InvalidStatusTransitionException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorWrapper> handleInvalidStatus(InvalidStatusTransitionException ex, HttpServletRequest request) {
         String requestId = getRequestId(request);
         logError(ex, request, requestId, HttpStatus.BAD_REQUEST);
         ErrorResponse error = new ErrorResponse("TRANSITION_INVALID", ex.getMessage(), null);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorWrapper(error));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorWrapper> handleValidationErrors(
+            MethodArgumentNotValidException ex,
+            HttpServletRequest request) {
+
+        String requestId = getRequestId(request);
+        logError(ex, request, requestId, HttpStatus.BAD_REQUEST);
+
+        List<FieldErrorDetail> details = ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(err -> new FieldErrorDetail(err.getField(), err.getDefaultMessage()))
+                .toList();
+
+        ErrorResponse error = new ErrorResponse("VALIDATION_ERROR","Invalid request", details);
+
+        return ResponseEntity.badRequest().body(new ErrorWrapper(error));
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGeneric(Exception ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorWrapper> handleGeneric(Exception ex, HttpServletRequest request) {
         String requestId = getRequestId(request);
         logError(ex, request, requestId, HttpStatus.INTERNAL_SERVER_ERROR);
         ErrorResponse error = new ErrorResponse("INTERNAL_SERVER_ERROR", "An unexpected error occurred.", null);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorWrapper(error));
     }
 
     private String getRequestId(HttpServletRequest request) {
@@ -64,7 +85,7 @@ public class GlobalExceptionHandler {
                     "error_message", ex.getMessage()
             );
 
-            log.error(mapper.writeValueAsString(logMap), ex);
+            log.error("Request error: {}", mapper.writeValueAsString(logMap), ex);
         } catch (Exception e) {
             log.error("Failed to log error properly", e);
         }
