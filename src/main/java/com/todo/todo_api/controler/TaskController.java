@@ -1,8 +1,10 @@
 package com.todo.todo_api.controler;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -13,8 +15,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.todo.todo_api.domain.Priority;
+import com.todo.todo_api.domain.Status;
 import com.todo.todo_api.dto.request.CreateTaskRequest;
 import com.todo.todo_api.dto.request.UpdateTaskRequest;
 import com.todo.todo_api.dto.response.TaskResponse;
@@ -37,12 +42,6 @@ public class TaskController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @GetMapping
-    public ResponseEntity<List<TaskResponse>> getAllTask() {
-        List<TaskResponse> tasks = taskService.getAllTasks();
-        return ResponseEntity.ok(tasks);
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<TaskResponse> getAllById(@PathVariable UUID id) {
         TaskResponse task = taskService.getTaskById(id);
@@ -60,5 +59,35 @@ public class TaskController {
     public ResponseEntity<Void> deleteTask(@PathVariable UUID id) {
         taskService.deleteTask(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<Map<String, Object>> getAllTasks(
+        @RequestParam(required = false) Status status,
+        @RequestParam(required = false) Priority priority,
+        @RequestParam(defaultValue = "createdAt") String sort,
+        @RequestParam(defaultValue = "asc") String order,
+        @RequestParam(defaultValue = "1") int page,
+        @RequestParam(defaultValue = "20") int limit
+    ) {
+        Page<TaskResponse> taskPage = taskService.getTasks(status, priority, sort, order, page, limit);
+
+        Map<String, Object> response = Map.of(
+            "data", taskPage.getContent(),
+            "pagination", Map.of(
+                "page", taskPage.getNumber() + 1,
+                "limit", taskPage.getSize(),
+                "totalPages", taskPage.getTotalPages(),
+                "totalItems", taskPage.getTotalElements()
+            )
+        );
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<TaskResponse>> searchTasks(@RequestParam("q") String query) {
+        List<TaskResponse> tasks = taskService.searchTasks(query);
+        return ResponseEntity.ok(tasks);
     }
 }
