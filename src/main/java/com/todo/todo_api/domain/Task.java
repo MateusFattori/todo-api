@@ -46,9 +46,11 @@ public class Task {
     private String description;
 
     @Enumerated(EnumType.STRING)
+    @Default
     private Status status = Status.pending;
 
     @Enumerated(EnumType.STRING)
+    @Default
     private Priority priority  = Priority.medium;
 
     private LocalDateTime dueDate;
