@@ -5,9 +5,14 @@ import java.util.UUID;
 
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.todo.todo_api.domain.Priority;
 import com.todo.todo_api.domain.Status;
 import com.todo.todo_api.domain.Task;
 import com.todo.todo_api.dto.request.CreateTaskRequest;
@@ -77,4 +82,29 @@ public class TaskService {
             case DONE -> next == Status.PENDING || next == Status.DONE;
         };
     }
+
+    public Page<TaskResponse> getTasks(Status status, Priority priority, String sort, String order, int page, int limit) {
+        Sort.Direction direction = "desc".equalsIgnoreCase(order) ? Sort.Direction.DESC : Sort.Direction.ASC;
+        String sortby = "dueDate".equalsIgnoreCase(sort) ? "dueDate"  : "createdAt";
+        Pageable pageable = PageRequest.of(page - 1, Math.min(limit, 100), Sort.by(direction, sortby));
+
+        Page<Task> taskPage;
+
+        if(status != null && priority != null) {
+            taskPage = repository.findAllByStatusAndPriority(status, priority, pageable);
+        } else if (status != null){
+            taskPage = repository.findAllByStatus(status, pageable);
+        } else if (priority != null) {
+            taskPage = repository.findAllByPriority(priority, pageable);
+        } else {
+            taskPage = repository.findAll(pageable);
+        }
+        return taskPage.map(TaskMapper::toResponse);
+    }
+
+    public List<TaskResponse> searchTasks (String query) {
+        List<Task> taks = repository.findByTitleContainingIgnoreCaseOrDescriptionContainingIgnoreCase(query, query);
+        return taks.stream().map(TaskMapper::toResponse).toList();
+    }
+
 }
