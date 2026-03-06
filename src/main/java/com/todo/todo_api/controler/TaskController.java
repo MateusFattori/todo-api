@@ -38,14 +38,14 @@ public class TaskController {
     private final TaskService taskService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<TaskResponse>> createeTask(@Valid @RequestBody CreateTaskRequest request) {
+    public ResponseEntity<ApiResponse<TaskResponse>> createTask(@Valid @RequestBody CreateTaskRequest request) {
         TaskResponse task = taskService.createTask(request);
         ApiResponse<TaskResponse> response = new ApiResponse<>(task, "Task created successfully");
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<TaskResponse>> getAllById(@PathVariable UUID id) {
+    public ResponseEntity<ApiResponse<TaskResponse>> getTaskById(@PathVariable UUID id) {
         TaskResponse task = taskService.getTaskById(id);
         ApiResponse<TaskResponse> response = new ApiResponse<>(task, "Task retrieved successfully");
         return ResponseEntity.ok(response);
