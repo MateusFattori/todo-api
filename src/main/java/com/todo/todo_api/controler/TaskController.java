@@ -1,7 +1,6 @@
 package com.todo.todo_api.controler;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -23,6 +22,7 @@ import com.todo.todo_api.domain.Status;
 import com.todo.todo_api.dto.request.CreateTaskRequest;
 import com.todo.todo_api.dto.request.UpdateTaskRequest;
 import com.todo.todo_api.dto.response.ApiResponse;
+import com.todo.todo_api.dto.response.PaginatedResponse;
 import com.todo.todo_api.dto.response.TaskResponse;
 import com.todo.todo_api.services.TaskService;
 
@@ -71,7 +71,7 @@ public class TaskController {
         }
 
     @GetMapping
-    public ResponseEntity<Map<String, Object>> getAllTasks(
+    public ResponseEntity<PaginatedResponse<TaskResponse>> getAllTasks(
         @RequestParam(required = false) Status status,
         @RequestParam(required = false) Priority priority,
         @RequestParam(defaultValue = "createdAt") String sort,
@@ -81,17 +81,7 @@ public class TaskController {
     ) {
         Page<TaskResponse> taskPage = taskService.getTasks(status, priority, sort, order, page, limit);
 
-        Map<String, Object> response = Map.of(
-            "data", taskPage.getContent(),
-            "pagination", Map.of(
-                "page", taskPage.getNumber() + 1,
-                "limit", taskPage.getSize(),
-                "total_pages", taskPage.getTotalPages(),
-                "total_items", taskPage.getTotalElements()
-            )
-        );
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(PaginatedResponse.from(taskPage));
     }
 
     @GetMapping("/search")
