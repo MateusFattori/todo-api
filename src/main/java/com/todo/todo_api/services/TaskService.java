@@ -49,14 +49,14 @@ public class TaskService {
     @Transactional(readOnly = true)
     public TaskResponse getTaskById(UUID id) {
         Task task = repository.findById(id)
-        .orElseThrow(() -> new NotFoundException("Task com o id '" + id + "' não encontrado."));
+        .orElseThrow(() -> new NotFoundException("Task with id '" + id + "'not found."));
         return TaskMapper.toResponse(task);
     }
 
     @Transactional
     public TaskResponse updateTask(UUID id, UpdateTaskRequest request) {
         Task task = repository.findById(id)
-        .orElseThrow(() -> new NotFoundException("Task com o id '" + id + "' não encontrado."));
+        .orElseThrow(() -> new NotFoundException("Task with id '" + id + "'not found."));
 
         if (request.getStatus() != null && !isValidStatusTransition(task.getStatus(), request.getStatus())) {
             throw new InvalidStatusTransitionException(task.getStatus(), request.getStatus());
@@ -71,7 +71,7 @@ public class TaskService {
     @Transactional
     public void deleteTask(UUID id) {
         Task task = repository.findById(id)
-        .orElseThrow(() -> new NotFoundException("Task com o id '" + id + "' não encontrado."));
+        .orElseThrow(() -> new NotFoundException("Task with id '" + id + "'not found."));
         repository.delete(task);
     }
 

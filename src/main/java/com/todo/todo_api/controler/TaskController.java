@@ -77,8 +77,8 @@ public class TaskController {
             "pagination", Map.of(
                 "page", taskPage.getNumber() + 1,
                 "limit", taskPage.getSize(),
-                "totalPages", taskPage.getTotalPages(),
-                "totalItems", taskPage.getTotalElements()
+                "total_pages", taskPage.getTotalPages(),
+                "total_items", taskPage.getTotalElements()
             )
         );
 
