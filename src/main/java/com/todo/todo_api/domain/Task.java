@@ -45,10 +45,12 @@ public class Task {
     @Column(length = 1000)
     private String description;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     @Default
     private Status status = Status.pending;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     @Default
     private Priority priority  = Priority.medium;
