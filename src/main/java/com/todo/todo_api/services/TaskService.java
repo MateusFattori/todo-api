@@ -160,9 +160,9 @@ public class TaskService {
 
     private boolean isValidStatusTransition(Status current, Status next) {
         return switch (current) {
-            case peding -> next == Status.in_preogress || next == Status.peding;
-            case in_preogress -> next == Status.done || next == Status.peding || next == Status.in_preogress;
-            case done -> next == Status.peding || next == Status.done;
+            case pending -> next == Status.in_preogress || next == Status.pending;
+            case in_preogress -> next == Status.done || next == Status.pending || next == Status.in_preogress;
+            case done -> next == Status.pending || next == Status.done;
         };
     }
 }

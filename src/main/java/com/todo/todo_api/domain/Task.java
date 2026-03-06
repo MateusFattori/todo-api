@@ -18,6 +18,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -45,7 +46,7 @@ public class Task {
     private String description;
 
     @Enumerated(EnumType.STRING)
-    private Status status = Status.peding;
+    private Status status = Status.pending;
 
     @Enumerated(EnumType.STRING)
     private Priority priority  = Priority.medium;

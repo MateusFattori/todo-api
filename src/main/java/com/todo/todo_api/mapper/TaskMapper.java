@@ -16,7 +16,7 @@ public class TaskMapper {
         return Task.builder()
         .title(request.getTitle())
         .description(request.getDescription())
-        .status(request.getStatus() != null ? request.getStatus() : Status.peding)
+        .status(request.getStatus() != null ? request.getStatus() : Status.pending)
         .priority(request.getPriority() != null ? request.getPriority() : Priority.medium)
         .dueDate(request.getDueDate())
         .build();
