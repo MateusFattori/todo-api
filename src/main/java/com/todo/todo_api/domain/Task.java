@@ -45,10 +45,10 @@ public class Task {
     private String description;
 
     @Enumerated(EnumType.STRING)
-    private Status status = Status.PENDING;
+    private Status status = Status.peding;
 
     @Enumerated(EnumType.STRING)
-    private Priority priority  = Priority.MEDIUM;
+    private Priority priority  = Priority.medium;
 
     private LocalDateTime dueDate;
 
