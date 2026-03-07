@@ -25,7 +25,7 @@ Esta solução simplifica o gerenciamento de tarefas, permitindo que os usuário
 - Springdoc OpenAPI (Swagger)  
 - JUnit 5 + Mockito (testes unitários)  
 
----# 📝 Todo List API
+# Todo List API
 
 ## Descrição da Solução
 A **Todo List API** é uma aplicação backend que permite aos usuários gerenciar tarefas de forma eficiente. Ela foi construída com **Java 21 + Spring Boot 4**, utilizando **PostgreSQL 16+** para persistência de dados, e é containerizada com **Docker e Docker Compose** para facilitar a implantação.
@@ -42,9 +42,9 @@ Esta solução simplifica o gerenciamento de tarefas, permitindo que os usuário
 
 ---
 
-## ⚡ Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
-- Java 21  
+- Java 25
 - Spring Boot 4.x  
 - PostgreSQL 16+  
 - Docker & Docker Compose  
