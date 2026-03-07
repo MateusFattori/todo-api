@@ -19,7 +19,9 @@ import com.todo.todo_api.domain.Status;
 import com.todo.todo_api.domain.Task;
 import com.todo.todo_api.dto.request.CreateTaskRequest;
 import com.todo.todo_api.dto.request.UpdateTaskRequest;
+import com.todo.todo_api.dto.response.PaginatedResponse;
 import com.todo.todo_api.dto.response.TaskResponse;
+import com.todo.todo_api.exception.InvalidPaginationException;
 import com.todo.todo_api.exception.InvalidStatusTransitionException;
 import com.todo.todo_api.exception.NotFoundException;
 import com.todo.todo_api.mapper.TaskMapper;
@@ -90,7 +92,7 @@ public class TaskService {
     }
 
     @Transactional(readOnly = true)
-    public Page<TaskResponse> getTasks(
+    public PaginatedResponse<TaskResponse> getTasks(
             Status status,
             Priority priority,
             String sort,
@@ -98,18 +100,19 @@ public class TaskService {
             int page,
             int limit) {
 
-        validatePagination(page, limit);
+        if (page < 1) {
+            throw new InvalidPaginationException("Page must be greater than 0");
+        }
+        if (limit < 1) {
+            throw new InvalidPaginationException("Limit must be greater than 0");
+        }
 
         Sort.Direction direction =
                 "desc".equalsIgnoreCase(order) ? Sort.Direction.DESC : Sort.Direction.ASC;
-
         String sortField = validateSortField(sort);
-
-        Pageable pageable =
-                PageRequest.of(page - 1, Math.min(limit, 100), Sort.by(direction, sortField));
+        Pageable pageable = PageRequest.of(page - 1, Math.min(limit, 100), Sort.by(direction, sortField));
 
         Page<Task> taskPage;
-
         if (status != null && priority != null) {
             taskPage = repository.findAllByStatusAndPriority(status, priority, pageable);
         } else if (status != null) {
@@ -120,9 +123,12 @@ public class TaskService {
             taskPage = repository.findAll(pageable);
         }
 
-        return taskPage.map(TaskMapper::toResponse);
-    }
+        if (taskPage.isEmpty()) {
+            throw new NotFoundException("No tasks found for the given filters.");
+        }
 
+        return PaginatedResponse.from(taskPage.map(TaskMapper::toResponse));
+    }
 
     public List<TaskResponse> searchTasks (String query) {
         List<Task> tasks = repository.findByTitleContainingIgnoreCaseOrDescriptionContainingIgnoreCase(query, query);
@@ -135,17 +141,6 @@ public class TaskService {
                 dueDate.isBefore(LocalDateTime.now(ZoneOffset.UTC))) {
 
             throw new IllegalArgumentException("Due date must be in the future");
-        }
-    }
-
-    private void validatePagination(int page, int limit) {
-
-        if (page < 1) {
-            throw new IllegalArgumentException("Page must be greater than 0");
-        }
-
-        if (limit < 1) {
-            throw new IllegalArgumentException("Limit must be greater than 0");
         }
     }
 

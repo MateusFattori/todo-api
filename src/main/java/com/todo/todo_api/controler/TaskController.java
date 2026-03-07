@@ -3,7 +3,6 @@ package com.todo.todo_api.controler;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -26,6 +25,7 @@ import com.todo.todo_api.dto.response.PaginatedResponse;
 import com.todo.todo_api.dto.response.TaskResponse;
 import com.todo.todo_api.services.TaskService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -33,6 +33,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("api/todos")
 @RequiredArgsConstructor
 @Validated
+@Tag(name = "Tasks", description = "Endpoints para Gerenciamento de Tarefas")
 public class TaskController {
     
     private final TaskService taskService;
@@ -70,19 +71,20 @@ public class TaskController {
             return ResponseEntity.ok(response);
         }
 
-    @GetMapping
-    public ResponseEntity<PaginatedResponse<TaskResponse>> getAllTasks(
-        @RequestParam(required = false) Status status,
-        @RequestParam(required = false) Priority priority,
-        @RequestParam(defaultValue = "createdAt") String sort,
-        @RequestParam(defaultValue = "asc") String order,
-        @RequestParam(defaultValue = "1") int page,
-        @RequestParam(defaultValue = "20") int limit
-    ) {
-        Page<TaskResponse> taskPage = taskService.getTasks(status, priority, sort, order, page, limit);
+        @GetMapping
+        public ResponseEntity<PaginatedResponse<TaskResponse>> getAllTasks(
+                @RequestParam(required = false) Status status,
+                @RequestParam(required = false) Priority priority,
+                @RequestParam(defaultValue = "createdAt") String sort,
+                @RequestParam(defaultValue = "asc") String order,
+                @RequestParam(defaultValue = "1") int page,
+                @RequestParam(defaultValue = "20") int limit
+        ) {
+            PaginatedResponse<TaskResponse> response = taskService.getTasks(status, priority, sort, order, page, limit);
 
-        return ResponseEntity.ok(PaginatedResponse.from(taskPage));
-    }
+            return ResponseEntity.ok(response);
+        }
+
 
     @GetMapping("/search")
     public ResponseEntity<ApiResponse<List<TaskResponse>>> searchTasks(@RequestParam("q") String query) {

@@ -60,6 +60,18 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(new ErrorWrapper(error));
     }
 
+    @ExceptionHandler(InvalidPaginationException.class)
+    public ResponseEntity<ErrorWrapper> handleInvalidPagination(
+            InvalidPaginationException ex, HttpServletRequest request) {
+
+        String requestId = getRequestId(request);
+        logError(ex, request, requestId, HttpStatus.BAD_REQUEST);
+
+        ErrorResponse error = new ErrorResponse("INVALID_PAGINATION", ex.getMessage(),null);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorWrapper(error));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorWrapper> handleGeneric(Exception ex, HttpServletRequest request) {
         String requestId = getRequestId(request);
@@ -90,5 +102,4 @@ public class GlobalExceptionHandler {
             log.error("Failed to log error properly", e);
         }
     }
-
 }

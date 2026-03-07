@@ -6,8 +6,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class TodoApiApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(TodoApiApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(TodoApiApplication.class, args);
 
+        try {
+            java.awt.Desktop.getDesktop().browse(
+                new java.net.URI("http://localhost:8080/swagger-ui/index.html")
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
