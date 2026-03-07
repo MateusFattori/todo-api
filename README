@@ -1,276 +1,292 @@
-Todo List API
+# Todo List API
 
-Descrição da Solução
+## Descrição da Solução
+A **Todo List API** é uma aplicação backend que permite aos usuários gerenciar tarefas de forma eficiente. Ela foi construída com **Java 21 + Spring Boot 4**, utilizando **PostgreSQL 16+** para persistência de dados, e é containerizada com **Docker e Docker Compose** para facilitar a implantação.
 
-A Todo List API é uma aplicação backend que permite aos usuários gerenciar tarefas de forma eficiente. Ela foi construída com Java 21 + Spring Boot 4, utilizando PostgreSQL 16+ para persistência de dados, e é containerizada com Docker e Docker Compose para facilitar a implantação.
+O sistema oferece funcionalidades de **CRUD de tarefas**, com suporte a **filtros, ordenação, paginação**, e garante que **validações de dados e transições de status** sejam respeitadas. Além disso, possui **health check do serviço e do banco**, **documentação automática via Swagger/OpenAPI** e **logging estruturado em JSON**.
 
-O sistema oferece funcionalidades de CRUD de tarefas, com suporte a filtros, ordenação, paginação, e garante que validações de dados e transições de status sejam respeitadas. Além disso, possui health check do serviço e do banco, documentação automática via Swagger/OpenAPI e logging estruturado em JSON.
-
-Como a Solução Ajuda as Pessoas
-
+### Como a Solução Ajuda as Pessoas
 Esta solução simplifica o gerenciamento de tarefas, permitindo que os usuários:
 
-Organizem suas atividades de forma clara e eficiente.
+- Organizem suas atividades de forma clara e eficiente.  
+- Filtragem por prioridade e status para foco em tarefas importantes.  
+- Visualizem o histórico e acompanhem deadlines com datas futuras.  
+- Automatizem verificações de integridade do serviço e banco de dados.
 
-Filtrem por prioridade e status para foco em tarefas importantes.
+---
 
-Visualizem o histórico e acompanhem deadlines com datas futuras.
+## Tecnologias Utilizadas
 
-Automatizem verificações de integridade do serviço e banco de dados.
+- Java 25 
+- Spring Boot 4.x  
+- PostgreSQL 16+  
+- Docker & Docker Compose  
+- Flyway (migrations automáticas)  
+- Springdoc OpenAPI (Swagger)  
+- JUnit 5 + Mockito (testes unitários)  
 
-Tecnologias Utilizadas
+# Todo List API
 
-Java 21/25
+## Descrição da Solução
+A **Todo List API** é uma aplicação backend que permite aos usuários gerenciar tarefas de forma eficiente. Ela foi construída com **Java 21 + Spring Boot 4**, utilizando **PostgreSQL 16+** para persistência de dados, e é containerizada com **Docker e Docker Compose** para facilitar a implantação.
 
-Spring Boot 4.x
+O sistema oferece funcionalidades de **CRUD de tarefas**, com suporte a **filtros, ordenação, paginação**, e garante que **validações de dados e transições de status** sejam respeitadas. Além disso, possui **health check do serviço e do banco**, **documentação automática via Swagger/OpenAPI** e **logging estruturado em JSON**.
 
-PostgreSQL 16+
+### Como a Solução Ajuda as Pessoas
+Esta solução simplifica o gerenciamento de tarefas, permitindo que os usuários:
 
-Docker & Docker Compose
+- Organizem suas atividades de forma clara e eficiente.  
+- Filtragem por prioridade e status para foco em tarefas importantes.  
+- Visualizem o histórico e acompanhem deadlines com datas futuras.  
+- Automatizem verificações de integridade do serviço e banco de dados.
 
-Flyway (migrations automáticas)
+---
 
-Springdoc OpenAPI (Swagger)
+## Tecnologias Utilizadas
 
-JUnit 5 + Mockito (testes unitários)
+- Java 25
+- Spring Boot 4.x  
+- PostgreSQL 16+  
+- Docker & Docker Compose  
+- Flyway (migrations automáticas)  
+- Springdoc OpenAPI (Swagger)  
+- JUnit 5 + Mockito (testes unitários)  
 
-Swagger
+---
 
-http://localhost:8080/api/docs
+## 🛠 Como Rodar
 
-Documentação
+### Passos:
 
-Dentro da pasta docs está o arquivo swagger.yaml para visualização e os arquivos JSON para testar o código tanto no Postman quanto no Insomnia.
+1. Clone o repositório:
 
-Como rodar
+```bash
+git clone https://github.com/seuusuario/todo-api.git
+cd todo-api
 
-Deve abrir o projeto no Visual Studio Code com a extensão Extension Pack for Java instalada.
+## Como Rodar
 
-Crie o arquivo .env (exemplo abaixo).
+### Passos:
 
-Pode rodar via Docker: docker-compose up --build.
+1. Clone o repositório:
 
-Ou apertar F5 no teclado para rodar o código via IDE.
+```bash
+git clone https://github.com/seuusuario/todo-api.git
+cd todo-api
 
-Variáveis de Ambiente (.env)
+2. Crie o arquivo .env baseado no .env.example:
 
-Variável
+cp .env.example .env
 
-Padrão
+Exemplo de .env:
 
-Descrição
+API_PORT=8080
+DB_HOST=db
+DB_PORT=5432
+DB_NAME=todo_db
+DB_USER=todo_user
+DB_PASSWORD=todo_password
 
-API_PORT
+3. Suba a aplicação com Docker Compose:
 
-8080
+docker-compose up --build
 
-Porta que a API vai rodar
+A API estará disponível em: http://localhost:8080
 
-DB_HOST
+A documentação Swagger estará em: http://localhost:8080
 
-db
+O arquivo da documentação Swagger/OpenAPI também está incluído no projeto em:
+docs/swagger.yaml
 
-Host do PostgreSQL
-
-DB_PORT
-
-5432
-
-Porta do PostgreSQL
-
-DB_NAME
-
-todo_db
-
-Nome do banco de dados
-
-DB_USER
-
-todo_user
-
-Usuário do banco
-
-DB_PASSWORD
-
-todo_password
-
-Senha do banco
-
-Endpoints
-
+## Endpoints
 Health Check
 
-GET /api/health
+`GET` /api/health
 
-Verifica a saúde do sistema e conexão com o banco.
-
-200 sucesso (Healthy)
-503 serviço indisponível (Unhealthy)
-
-Tarefas (Todos)
-
-GET /api/todos
-
-Lista todas as tarefas cadastradas com suporte a paginação e filtros.
-
-200 sucesso
-
-GET /api/todos/{id}
-
-Retorna os detalhes de uma tarefa com o id informado.
-
-códigos de status
-
-200 sucesso
-404 id não encontrado
-
-POST /api/todos
-
-Cadastrar uma nova tarefa.
-
-campo
-
-tipo
-
-obrigatório
-
-descrição
-
-title
-
-string
-
-✅
-
-Título da tarefa
-
-description
-
-string
-
-❌
-
-Descrição detalhada
-
-status
-
-string
-
-✅
-
-Status (pending, in_progress, done)
-
-priority
-
-string
-
-✅
-
-Prioridade (low, medium, high)
-
-dueDate
-
-LocalDateTime
-
-✅
-
-Data de entrega da tarefa
-
-códigos de status
-
-201 criado com sucesso
-400 validação falhou
-
-DELETE /api/todos/{id}
-
-Apaga a tarefa com o id informado.
-
-códigos de status
-
-204 apagado com sucesso
-404 id não encontrado
-
-PUT /api/todos/{id}
-
-Altera a tarefa com o id informado.
-
-campo
-
-tipo
-
-obrigatório
-
-descrição
-
-title
-
-string
-
-✅
-
-Título da tarefa
-
-description
-
-string
-
-✅
-
-Descrição detalhada
-
-status
-
-string
-
-✅
-
-Status atualizado
-
-priority
-
-string
-
-✅
-
-Prioridade atualizada
-
-dueDate
-
-LocalDateTime
-
-✅
-
-Nova data de entrega
-
-códigos de status
-
-200 sucesso
-404 id não encontrado
-400 validação falhou
-
-Schema
+Exemplo de resposta 200 OK:
 
 {
-  "id": "uuid-exemplo",
+  "status": "healthy",
+  "version": "1.0.0",
+  "uptime_seconds": 3600,
+  "checks": {
+    "database": {
+      "status": "healthy",
+      "response_time_ms": 3
+    }
+  }
+}
+Criar Tarefa
+
+`POST` /api/todos
+Content-Type: application/json
+
+Exemplo de requisição:
+
+{
   "title": "Finalizar relatório",
   "description": "Completar o relatório semanal",
   "status": "pending",
   "priority": "medium",
-  "dueDate": "2026-03-10T18:00:00",
-  "createdAt": "2026-03-06T12:00:00Z",
-  "updatedAt": "2026-03-06T12:00:00Z"
+  "dueDate": "2026-03-10T18:00:00"
 }
 
+Resposta 201 Created:
 
-Testando a Aplicação
+{
+  "data": {
+    "id": "uuid-gerado",
+    "title": "Finalizar relatório",
+    "description": "Completar o relatório semanal",
+    "status": "pending",
+    "priority": "medium",
+    "dueDate": "2026-03-10T18:00:00",
+    "createdAt": "2026-03-06T12:00:00Z",
+    "updatedAt": "2026-03-06T12:00:00Z"
+  },
+  "message": "Task created successfully"
+}
 
-Testes Unitários:
+Schema da Task:
 
+{
+  "id": "uuid",
+  "title": "string",
+  "description": "string",
+  "status": "pending|in_progress|done",
+  "priority": "low|medium|high",
+  "dueDate": "ISO8601 datetime",
+  "createdAt": "ISO8601 datetime",
+  "updatedAt": "ISO8601 datetime"
+}
+
+Buscar Tarefa por ID
+
+`GET` /api/todos/{id}
+
+Códigos de status:
+
+200: Sucesso
+
+404: Tarefa não encontrada
+
+Exemplo de resposta 200 OK:
+
+{
+  "data": {
+    "id": "uuid-da-tarefa",
+    "title": "Finalizar relatório",
+    "description": "Completar o relatório semanal",
+    "status": "pending",
+    "priority": "medium",
+    "dueDate": "2026-03-10T18:00:00",
+    "createdAt": "2026-03-06T12:00:00Z",
+    "updatedAt": "2026-03-06T12:00:00Z"
+  },
+  "message": "Task retrieved successfully"
+}
+Atualizar Tarefa
+
+`PUT` /api/todos/{id}
+Content-Type: application/json
+
+Exemplo de requisição:
+
+{
+  "title": "Finalizar relatório atualizado",
+  "status": "in_progress"
+}
+
+Resposta 200 OK:
+
+{
+  "data": {
+    "id": "uuid-da-tarefa",
+    "title": "Finalizar relatório atualizado",
+    "description": "Completar o relatório semanal",
+    "status": "in_progress",
+    "priority": "medium",
+    "dueDate": "2026-03-10T18:00:00",
+    "createdAt": "2026-03-06T12:00:00Z",
+    "updatedAt": "2026-03-06T12:05:00Z"
+  },
+  "message": "Task updated successfully"
+}
+Deletar Tarefa
+
+`DELETE` /api/todos/{id}
+
+Resposta 200 OK:
+
+{
+  "data": null,
+  "message": "Task deleted successfully"
+}
+Listar Tarefas com Filtros
+
+`GET` /api/todos?status=pending&priority=high&sort=dueDate&order=asc&page=1&limit=20
+
+Exemplo de resposta com paginação:
+
+{
+  "data": [ ... ],
+  "pagination": {
+    "page": 1,
+    "limit": 20,
+    "total_items": 5,
+    "total_pages": 1
+  }
+}
+Buscar por Texto
+
+`GET` /api/todos/search?q=relatório
+
+Exemplo de resposta:
+
+{
+  "data": [ ... ],
+  "message": "Tasks retrieved successfully"
+}
+
+Variáveis de Ambiente
+Variável	Padrão	Descrição
+API_PORT	8080	Porta que a API vai rodar
+DB_HOST	db	Host do PostgreSQL
+DB_PORT	5432	Porta do PostgreSQL
+DB_NAME	todo_db	Nome do banco de dados
+DB_USER	todo_user	Usuário do banco
+DB_PASSWORD	todo_password	Senha do banco
+
+Use .env.example como modelo.
+
+## Testando a Aplicação
+Testes unitários
 mvn clean test
+Testar via cURL
 
-
-Testar via cURL:
+Criar tarefa
 
 curl -X POST http://localhost:8080/api/todos \
   -H "Content-Type: application/json" \
-  -d '{"title":"Teste API","description":"Testando","status":"pending","priority":"medium"}'
+  -d '{"title":"Teste API","description":"Testando endpoints","status":"pending","priority":"medium"}'
+
+Listar tarefas
+
+curl http://localhost:8080/api/todos
+
+Health check
+
+curl http://localhost:8080/api/health
+
+Swagger UI
+
+http://localhost:8080/api/docs
+
+Arquivo Swagger: docs/swagger.yaml
+
+Simular falha do banco
+
+docker stop todo_postgres
+curl http://localhost:8080/api/health
+
+Deve retornar status: "unhealthy" e HTTP 503.
