@@ -32,7 +32,10 @@ class CreateTaskRequestTests {
 
         Set<ConstraintViolation<CreateTaskRequest>> violations = validator.validate(request);
         assertFalse(violations.isEmpty());
-        assertEquals("Title é obrigatório", violations.iterator().next().getMessage());
+
+        boolean containsExpected = violations.stream()
+                .anyMatch(v -> v.getMessage().equals("Title é obrigatório"));
+        assertTrue(containsExpected, "Deveria conter a mensagem: 'Title é obrigatório'");
     }
 
     @Test

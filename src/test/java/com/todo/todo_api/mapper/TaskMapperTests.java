@@ -63,14 +63,15 @@ class TaskMapperTests {
 
         TaskResponse response = TaskMapper.toResponse(task);
 
-        assertEquals(task.getId(), response.id());
-        assertEquals(task.getTitle(), response.title());
-        assertEquals(task.getDescription(), response.description());
-        assertEquals(task.getStatus(), response.status());
-        assertEquals(task.getPriority(), response.priority());
-        assertEquals(task.getDueDate(), response.dueDate());
-        assertEquals(task.getCreatedAt(), response.createdAt());
-        assertEquals(task.getUpdatedAt(), response.updatedAt());
+        // Corrigido para usar getters
+        assertEquals(task.getId(), response.getId());
+        assertEquals(task.getTitle(), response.getTitle());
+        assertEquals(task.getDescription(), response.getDescription());
+        assertEquals(task.getStatus(), response.getStatus());
+        assertEquals(task.getPriority(), response.getPriority());
+        assertEquals(task.getDueDate(), response.getDueDate());
+        assertEquals(task.getCreatedAt(), response.getCreatedAt());
+        assertEquals(task.getUpdatedAt(), response.getUpdatedAt());
     }
 
     @Test
