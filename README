@@ -97,6 +97,7 @@ A documentação Swagger estará em: http://localhost:8080
 
 O arquivo da documentação Swagger/OpenAPI também está incluído no projeto em:
 docs/swagger.yaml
+---
 
 ## Endpoints
 Health Check
