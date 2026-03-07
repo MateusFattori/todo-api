@@ -15,7 +15,6 @@ public class SwaggerConfig {
         try {
             String url = "http://localhost:8080/api/docs";
 
-            // Verifica se o Desktop é suportado
             if (Desktop.isDesktopSupported()) {
                 Desktop desktop = Desktop.getDesktop();
                 if (desktop.isSupported(Desktop.Action.BROWSE)) {

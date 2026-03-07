@@ -16,9 +16,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestControllerAdvice
-public class GlobalExceptionHandler {
+public class GlobalExceptionHandller {
 
-    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandller.class);
     private static final ObjectMapper mapper = new ObjectMapper();
     
     public record ErrorResponse(String code, String message, List<FieldErrorDetail> details) {}
