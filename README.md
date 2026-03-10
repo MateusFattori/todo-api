@@ -63,16 +63,8 @@ Esta solução simplifica o gerenciamento de tarefas, permitindo que os usuário
 ```bash
 git clone https://github.com/seuusuario/todo-api.git
 cd todo-api
-
-## Como Rodar
-
-### Passos:
-
-1. Clone o repositório:
-
-```bash
-git clone https://github.com/seuusuario/todo-api.git
-cd todo-api
+.code
+```
 
 2. Crie o arquivo .env baseado no .env.example:
 
