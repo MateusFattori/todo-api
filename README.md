@@ -72,12 +72,15 @@ cp .env.example .env
 
 Exemplo de .env:
 
+```js
 API_PORT=8080
 DB_HOST=db
 DB_PORT=5432
 DB_NAME=todo_db 
 DB_USER=todo_user
 DB_PASSWORD=todo_password
+```
+
 
 3. Suba a aplicação com Docker Compose:
 
@@ -97,6 +100,7 @@ Health Check
 
 Exemplo de resposta 200 OK:
 
+```js
 {
   "status": "healthy",
   "version": "1.0.0",
@@ -108,6 +112,8 @@ Exemplo de resposta 200 OK:
     }
   }
 }
+```
+
 Criar Tarefa
 
 `POST` /api/todos
@@ -115,6 +121,7 @@ Content-Type: application/json
 
 Exemplo de requisição:
 
+```js
 {
   "title": "Finalizar relatório",
   "description": "Completar o relatório semanal",
@@ -122,9 +129,11 @@ Exemplo de requisição:
   "priority": "medium",
   "dueDate": "2026-03-10T18:00:00"
 }
+```
 
 Resposta 201 Created:
 
+```js
 {
   "data": {
     "id": "uuid-gerado",
@@ -138,9 +147,11 @@ Resposta 201 Created:
   },
   "message": "Task created successfully"
 }
+```
 
 Schema da Task:
 
+```js
 {
   "id": "uuid",
   "title": "string",
@@ -151,6 +162,7 @@ Schema da Task:
   "createdAt": "ISO8601 datetime",
   "updatedAt": "ISO8601 datetime"
 }
+```
 
 Buscar Tarefa por ID
 
@@ -191,6 +203,7 @@ Exemplo de requisição:
 
 Resposta 200 OK:
 
+```js
 {
   "data": {
     "id": "uuid-da-tarefa",
@@ -204,6 +217,7 @@ Resposta 200 OK:
   },
   "message": "Task updated successfully"
 }
+```
 Deletar Tarefa
 
 `DELETE` /api/todos/{id}
@@ -220,6 +234,7 @@ Listar Tarefas com Filtros
 
 Exemplo de resposta com paginação:
 
+```js
 {
   "data": [ ... ],
   "pagination": {
@@ -229,6 +244,8 @@ Exemplo de resposta com paginação:
     "total_pages": 1
   }
 }
+```
+
 Buscar por Texto
 
 `GET` /api/todos/search?q=relatório
@@ -242,13 +259,14 @@ Exemplo de resposta:
 
 Variáveis de Ambiente
 Variável	Padrão	Descrição
+```js
 API_PORT	8080	Porta que a API vai rodar
 DB_HOST	db	Host do PostgreSQL
 DB_PORT	5432	Porta do PostgreSQL
 DB_NAME	todo_db	Nome do banco de dados
 DB_USER	todo_user	Usuário do banco
 DB_PASSWORD	todo_password	Senha do banco
-
+```
 Use .env.example como modelo.
 
 ## Testando a Aplicação
