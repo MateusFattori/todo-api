@@ -10,11 +10,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GlobalExceptionHandllerTests {
 
-    private GlobalExceptionHandller handler;
+    private GlobalExceptionHandler handler;
 
     @BeforeEach
     void setup() {
-        handler = new GlobalExceptionHandller();
+        handler = new GlobalExceptionHandler();
     }
 
     @Test
